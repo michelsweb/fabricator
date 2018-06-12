@@ -1,7 +1,13 @@
 /**
  * Toolkit styles
  */
+@import "./base/functions";
+@import "./base/mixins";
+@import "./base/variables";
 
-body {
-  font-family: sans-serif;
-}
+@import "normalize-scss/sass/normalize/import-now";
+
+
+@import "./partials/grid";
+@import "./partials/layout";
+@import "./partials/type";
