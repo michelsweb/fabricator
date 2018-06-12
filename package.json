@@ -3,7 +3,7 @@
   "version": "1.3.1",
   "description": "A tool for building website UI toolkits",
   "license": "MIT",
-  "homepage": "http://fbrctr.github.io/",
+  "homepage": "",
   "scripts": {
     "prestart": "npm install",
     "build": "npm run prestart && gulp",
@@ -18,39 +18,42 @@
     "patterns",
     "library"
   ],
-  "author": "Luke Askew",
-  "licenses": "MIT",
+  "author": "Michael Michel",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fbrctr/fabricator.git"
+    "url": "https://github.com/michelsweb/fabricator.git"
   },
   "engines": {
     "node": ">=4.0",
     "npm": ">=2.0.0"
   },
   "devDependencies": {
-    "babel-core": "^6.10.4",
-    "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-2": "^6.5.0",
-    "browser-sync": "^2.13.0",
-    "del": "^2.2.1",
-    "eslint": "^2.13.1",
-    "eslint-config-airbnb-base": "^3.0.1",
-    "eslint-plugin-import": "^1.9.2",
-    "fabricator-assemble": "^1.1.11",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "browser-sync": "^2.24.4",
+    "del": "^3.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "fabricator-assemble": "^1.2.0",
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-csso": "^2.0.0",
-    "gulp-if": "^2.0.1",
-    "gulp-imagemin": "^3.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-util": "^3.0.7",
-    "imports-loader": "^0.6.5",
-    "run-sequence": "^1.2.1",
-    "script-loader": "^0.7.0",
-    "webpack": "^1.13.1"
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-csso": "^3.0.1",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-rename": "^1.3.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-util": "^3.0.8",
+    "imports-loader": "^0.8.0",
+    "run-sequence": "^2.2.1",
+    "script-loader": "^0.7.2",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "webpack": "^4.12.0"
+  },
+  "dependencies": {
+    "gulp-html-prettify": "^0.0.1"
   }
 }

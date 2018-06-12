@@ -8,6 +8,7 @@ const gulpif = require('gulp-if');
 const imagemin = require('gulp-imagemin');
 const prefix = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
+const prettify = require('gulp-html-prettify');
 const reload = browserSync.reload;
 const runSequence = require('run-sequence');
 const sass = require('gulp-sass');
@@ -55,10 +56,8 @@ const config = {
   dest: 'dist',
 };
 
-
 // clean
 gulp.task('clean', del.bind(null, [config.dest]));
-
 
 // styles
 gulp.task('styles:fabricator', () => {
@@ -130,6 +129,12 @@ gulp.task('assembler', (done) => {
   done();
 });
 
+gulp.task('prettify', () => {
+  return gulp.src(`${config.dest}/**/*.html`)
+    .pipe(prettify(require('./prettify.json')))
+    .pipe(gulp.dest(`${config.dest}/`));
+});
+
 
 // server
 gulp.task('serve', () => {
@@ -142,14 +147,14 @@ gulp.task('serve', () => {
     logPrefix: 'FABRICATOR',
   });
 
-  gulp.task('assembler:watch', ['assembler'], browserSync.reload);
+  gulp.task('assembler:watch', ['assembler', 'prettify'], browserSync.reload);
   gulp.watch(config.templates.watch, ['assembler:watch']);
 
   gulp.task('styles:watch', ['styles']);
   gulp.watch([config.styles.fabricator.watch, config.styles.toolkit.watch], ['styles:watch']);
 
   gulp.task('scripts:watch', ['scripts'], browserSync.reload);
-  gulp.watch([config.scripts.fabricator.watch, config.scripts.toolkit.watch], ['scripts:watch']);
+  gulp.watch(['./webpack.config.js', config.scripts.fabricator.watch, config.scripts.toolkit.watch], ['scripts:watch']);
 
   gulp.task('images:watch', ['images'], browserSync.reload);
   gulp.watch(config.images.toolkit.watch, ['images:watch']);
@@ -166,6 +171,7 @@ gulp.task('default', ['clean'], () => {
     'scripts',
     'images',
     'assembler',
+    'prettify',
   ];
 
   // run build

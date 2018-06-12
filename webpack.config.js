@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 
 /**
@@ -7,25 +8,12 @@ const webpack = require('webpack');
  * @param {boolean} isDev If in development mode
  * @return {Array}
  */
-function getPlugins(isDev) {
+function getPlugins() {
 
   const plugins = [
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({}),
   ];
-
-  if (isDev) {
-    plugins.push(new webpack.NoErrorsPlugin());
-  } else {
-    plugins.push(new webpack.optimize.DedupePlugin());
-    plugins.push(new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      sourceMap: false,
-      compress: {
-        warnings: false,
-      },
-    }));
-  }
 
   return plugins;
 
@@ -36,27 +24,39 @@ function getPlugins(isDev) {
  * Define loaders
  * @return {Array}
  */
-function getLoaders() {
+function getRules() {
 
-  const loaders = [{
-    test: /(\.js)/,
-    exclude: /(node_modules)/,
-    loaders: ['babel'],
-  }, {
-    test: /(\.jpg|\.png)$/,
-    loader: 'url-loader?limit=10000',
-  }, {
-    test: /\.json/,
-    loader: 'json-loader',
-  }];
+  const rules = [
+    {
+      test: /(\.js)/,
+      exclude: /(node_modules)/,
+      loaders: ['babel-loader'],
+    },
+    {
+      test: /(\.jpg|\.png)$/,
+      loader: 'url-loader?limit=10000',
+    },
+    {
+      test: /\.json/,
+      loader: 'json-loader',
+    },
+  ];
 
-  return loaders;
+  return rules;
 
 }
 
 
 module.exports = (config) => {
   return {
+    optimization: {
+      minimize: !config.dev,
+      minimizer: [
+        new UglifyJsPlugin({
+          sourceMap: false,
+        }),
+      ],
+    },
     entry: {
       'fabricator/scripts/f': config.scripts.fabricator.src,
       'toolkit/scripts/toolkit': config.scripts.toolkit.src,
@@ -67,11 +67,11 @@ module.exports = (config) => {
     },
     devtool: 'source-map',
     resolve: {
-      extensions: ['', '.js'],
+      extensions: ['.jsx', '.js', '.json'],
     },
-    plugins: getPlugins(config.dev),
+    plugins: getPlugins(),
     module: {
-      loaders: getLoaders(),
+      rules: getRules(),
     },
   };
 };
