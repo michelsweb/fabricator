@@ -5,7 +5,6 @@ import plugin from '../factories/jquery-plugin';
 const clickHandler = (e) => {
   const self = e.data;
   e.preventDefault();
-  console.log(self.$el.data())
 };
 
 
