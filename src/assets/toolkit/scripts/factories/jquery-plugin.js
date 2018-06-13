@@ -1,16 +1,17 @@
 /**
  * Generate a jQuery plugin
- * @param pluginName [string] Plugin name
- * @param className [object] Class of the plugin
- * @param shortHand [bool] Generate a shorthand as $.pluginName
+ *
+ * @param pluginName {!string} Plugin name
+ * @param className {!Object} Class of the plugin
+ * @param shortHand {boolean} Generate a shorthand as $.pluginName
  *
  * @example
  * import plugin from 'plugin';
  *
  * class MyPlugin {
- *     constructor(element, options) {
- *         // ...
- *     }
+ *   constructor(element, options) {
+ *     // ...
+ *   }
  * }
  *
  * MyPlugin.DEFAULTS = {};

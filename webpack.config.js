@@ -39,19 +39,19 @@ function getRules() {
         {
           loader: 'babel-loader',
           options: {
-            "presets": [
-              "env",
-              "react",
-              "stage-2"
+            presets: [
+              'env',
+              'react',
+              'stage-2'
             ],
-            "plugins": [
-              "transform-decorators-legacy",
-              "transform-decorators",
+            plugins: [
+              'transform-decorators-legacy',
+              'transform-decorators',
               [
-                "transform-runtime",
+                'transform-runtime',
                 {
-                  "polyfill": false,
-                  "regenerator": true
+                  'polyfill': false,
+                  'regenerator': true
                 }
               ]
             ]
@@ -68,7 +68,7 @@ function getRules() {
       loader: 'json-loader',
     },
     {
-      test: /(jquery|bootstrap|tooltipster)(.*)(\.jsx?)$/,
+      test: /(jquery|bootstrap)(.*)(\.jsx?)$/,
       loader: 'expose-loader?$!expose-loader?jQuery',
     },
   ];

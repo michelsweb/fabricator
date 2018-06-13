@@ -15,6 +15,7 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const webpack = require('webpack');
 const compress = require('compression');
+const esdoc = require('gulp-esdoc')
 
 
 // configuration
@@ -115,6 +116,12 @@ gulp.task('scripts', (done) => {
   });
 });
 
+gulp.task('esdoc', () => {
+  return gulp.src(config.scripts.toolkit.watch)
+    .pipe(esdoc({
+      destination: './docs'
+    }));
+});
 
 // images
 gulp.task('images', ['favicon'], () => {
@@ -165,7 +172,7 @@ gulp.task('serve', () => {
   gulp.task('styles:watch', ['styles']);
   gulp.watch([config.styles.fabricator.watch, config.styles.toolkit.watch], ['styles:watch']);
 
-  gulp.task('scripts:watch', ['scripts'], browserSync.reload);
+  gulp.task('scripts:watch', ['scripts', 'esdoc'], browserSync.reload);
   gulp.watch(['./webpack.config.js', config.scripts.fabricator.watch, config.scripts.toolkit.watch], ['scripts:watch']);
 
   gulp.task('images:watch', ['images'], browserSync.reload);
@@ -181,6 +188,7 @@ gulp.task('default', ['clean'], () => {
   const tasks = [
     'styles',
     'scripts',
+    'esdoc',
     'images',
     'assembler',
     'prettify',
