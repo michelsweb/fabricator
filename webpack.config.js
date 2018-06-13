@@ -35,7 +35,29 @@ function getRules() {
     {
       test: /(\.js)/,
       exclude: /(node_modules)/,
-      loaders: ['babel-loader'],
+      use: [
+        {
+          loader: 'babel-loader',
+          options: {
+            "presets": [
+              "env",
+              "react",
+              "stage-2"
+            ],
+            "plugins": [
+              "transform-decorators-legacy",
+              "transform-decorators",
+              [
+                "transform-runtime",
+                {
+                  "polyfill": false,
+                  "regenerator": true
+                }
+              ]
+            ]
+          },
+        }
+      ],
     },
     {
       test: /(\.jpg|\.png)$/,
@@ -63,6 +85,11 @@ module.exports = (config) => {
       minimizer: [
         new UglifyJsPlugin({
           sourceMap: false,
+          uglifyOptions: {
+            output: {
+              comments: false
+            }
+          },
         }),
       ],
     },

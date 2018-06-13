@@ -14,6 +14,8 @@ const runSequence = require('run-sequence');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const webpack = require('webpack');
+const compress = require('compression');
+
 
 // configuration
 const config = {
@@ -72,7 +74,7 @@ gulp.task('styles:fabricator', () => {
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(prefix(config.styles.browsers))
-    .pipe(gulpif(!config.dev, csso()))
+    .pipe(gulpif(!config.dev, csso({ comments: false })))
     .pipe(rename('f.css'))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(config.styles.fabricator.dest))
@@ -86,7 +88,7 @@ gulp.task('styles:toolkit', () => {
       includePaths: './node_modules',
     }).on('error', sass.logError))
     .pipe(prefix(config.styles.browsers))
-    .pipe(gulpif(!config.dev, csso()))
+    .pipe(gulpif(!config.dev, csso({ comments: false })))
     .pipe(gulpif(config.dev, sourcemaps.write()))
     .pipe(gulp.dest(config.styles.toolkit.dest))
     .pipe(gulpif(config.dev, reload({ stream: true })));
@@ -149,6 +151,9 @@ gulp.task('serve', () => {
   browserSync({
     server: {
       baseDir: config.dest,
+      middleware: [
+        compress()
+      ]
     },
     notify: false,
     logPrefix: 'FABRICATOR',
