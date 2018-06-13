@@ -1,5 +1,1 @@
-/**
- * Toolkit JavaScript
- */
-
-console.log('Hallo!')
+import './modules/example'

@@ -13,6 +13,11 @@ function getPlugins() {
   const plugins = [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({}),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+    }),
   ];
 
   return plugins;
@@ -39,6 +44,10 @@ function getRules() {
     {
       test: /\.json/,
       loader: 'json-loader',
+    },
+    {
+      test: /(jquery|bootstrap|tooltipster)(.*)(\.jsx?)$/,
+      loader: 'expose-loader?$!expose-loader?jQuery',
     },
   ];
 
