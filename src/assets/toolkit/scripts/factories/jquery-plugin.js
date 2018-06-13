@@ -4,7 +4,7 @@ import $ from 'jquery';
  * Generate a jQuery plugin
  *
  * @param pluginName {!string} Plugin name
- * @param className {!Object} Class of the plugin
+ * @param ClassName {!Object} Class of the plugin
  * @param shortHand {boolean} Generate a shorthand as $.pluginName
  *
  * @example
@@ -20,7 +20,7 @@ import $ from 'jquery';
  *
  * plugin('myPlugin', MyPlugin);
  */
-export default function plugin(pluginName, className, shortHand = false) {
+export default function plugin(pluginName, ClassName, shortHand = false) {
 
   const dataName = `__${pluginName}`;
   const old = $.fn[pluginName];
@@ -29,10 +29,10 @@ export default function plugin(pluginName, className, shortHand = false) {
     return this.each(function () {
       const $this = $(this);
       let data = $this.data(dataName);
-      const options = $.extend({}, className.DEFAULTS, $this.data(), typeof option === 'object' && option);
+      const options = $.extend({}, ClassName.DEFAULTS, $this.data(), typeof option === 'object' && option);
 
       if (!data) {
-        $this.data(dataName, (data = new className(this, options)));
+        $this.data(dataName, (data = new ClassName(this, options)));
       }
 
       if (typeof option === 'string') {
@@ -43,10 +43,12 @@ export default function plugin(pluginName, className, shortHand = false) {
 
   // - Short hand
   if (shortHand) {
-    $[pluginName] = (options) => $({})[pluginName](options);
+    $[pluginName] = options => $({})[pluginName](options);
   }
 
   // - No conflict
-  $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
+  $.fn[pluginName].noConflict = () => {
+    $.fn[pluginName] = old;
+  };
 
 }
