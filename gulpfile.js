@@ -9,10 +9,6 @@ const imagemin = require('gulp-imagemin');
 const prefix = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
 const prettify = require('gulp-html-prettify');
-const restEmulator = require('gulp-rest-emulator');
-
-const { reload } = browserSync;
-
 const runSequence = require('run-sequence');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
@@ -20,6 +16,10 @@ const webpack = require('webpack');
 const compress = require('compression');
 const esdoc = require('gulp-esdoc');
 const prettifyConfig = require('./prettify.json');
+
+const { exec } = require('child_process');
+
+const { reload } = browserSync;
 
 
 // configuration
@@ -184,21 +184,12 @@ gulp.task('serve', () => {
 
 });
 
-gulp.task('run', () => {
-  // Options not require
-  const options = {
-    port: 3002,
-    root: ['./'],
-    rewriteNotFound: false,
-    rewriteTemplate: 'index.html',
-    corsEnable: false, // Set true to enable CORS
-    corsOptions: {}, // CORS options, default all origins
-    headers: {}, // Set headers for all response, default blank
-    httpsEnable: false, // Set true to enable HTTPS
-    httpsOptions: {}, // HTTPS options
-  };
-  return gulp.src(config.mocks)
-    .pipe(restEmulator(options));
+gulp.task('run', (cb) => {
+  exec('node mock', (err, stdout, stderr) => {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
 });
 
 
