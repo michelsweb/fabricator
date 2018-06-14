@@ -9,18 +9,23 @@ const imagemin = require('gulp-imagemin');
 const prefix = require('gulp-autoprefixer');
 const rename = require('gulp-rename');
 const prettify = require('gulp-html-prettify');
-const reload = browserSync.reload;
+const restEmulator = require('gulp-rest-emulator');
+
+const { reload } = browserSync;
+
 const runSequence = require('run-sequence');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const webpack = require('webpack');
 const compress = require('compression');
-const esdoc = require('gulp-esdoc')
+const esdoc = require('gulp-esdoc');
+const prettifyConfig = require('./prettify.json');
 
 
 // configuration
 const config = {
   dev: gutil.env.dev,
+  mocks: './mocks/**/*.js',
   styles: {
     browsers: 'last 1 version',
     fabricator: {
@@ -97,7 +102,6 @@ gulp.task('styles:toolkit', () => {
 
 gulp.task('styles', ['styles:fabricator', 'styles:toolkit']);
 
-
 // scripts
 const webpackConfig = require('./webpack.config')(config);
 
@@ -119,7 +123,7 @@ gulp.task('scripts', (done) => {
 gulp.task('esdoc', () => {
   return gulp.src(config.scripts.toolkit.watch)
     .pipe(esdoc({
-      destination: './docs'
+      destination: './docs',
     }));
 });
 
@@ -135,7 +139,6 @@ gulp.task('favicon', () => {
     .pipe(gulp.dest(config.dest));
 });
 
-
 // assembler
 gulp.task('assembler', (done) => {
   assembler({
@@ -147,20 +150,18 @@ gulp.task('assembler', (done) => {
 
 gulp.task('prettify', () => {
   return gulp.src(`${config.dest}/**/*.html`)
-    .pipe(prettify(require('./prettify.json')))
+    .pipe(prettify(prettifyConfig))
     .pipe(gulp.dest(`${config.dest}/`));
 });
 
-
 // server
 gulp.task('serve', () => {
-
   browserSync({
     server: {
       baseDir: config.dest,
       middleware: [
-        compress()
-      ]
+        compress(),
+      ],
     },
     notify: false,
     logPrefix: 'FABRICATOR',
@@ -178,6 +179,26 @@ gulp.task('serve', () => {
   gulp.task('images:watch', ['images'], browserSync.reload);
   gulp.watch(config.images.toolkit.watch, ['images:watch']);
 
+  gulp.task('run:watch', ['run']);
+  gulp.watch(config.mocks, ['run:watch']);
+
+});
+
+gulp.task('run', () => {
+  // Options not require
+  const options = {
+    port: 3002,
+    root: ['./'],
+    rewriteNotFound: false,
+    rewriteTemplate: 'index.html',
+    corsEnable: false, // Set true to enable CORS
+    corsOptions: {}, // CORS options, default all origins
+    headers: {}, // Set headers for all response, default blank
+    httpsEnable: false, // Set true to enable HTTPS
+    httpsOptions: {}, // HTTPS options
+  };
+  return gulp.src(config.mocks)
+    .pipe(restEmulator(options));
 });
 
 
@@ -197,6 +218,7 @@ gulp.task('default', ['clean'], () => {
   // run build
   runSequence(tasks, () => {
     if (config.dev) {
+      gulp.start('run');
       gulp.start('serve');
     }
   });

@@ -6,3 +6,5 @@
 /dist/
 /.sass-cache/
 /docs/
+
+mock/rest/*/*/*/mock/response.txt
