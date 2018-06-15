@@ -17,8 +17,6 @@ const compress = require('compression');
 const esdoc = require('gulp-esdoc');
 const prettifyConfig = require('./prettify.json');
 
-const { exec } = require('child_process');
-
 const { reload } = browserSync;
 
 
@@ -157,6 +155,7 @@ gulp.task('prettify', () => {
 // server
 gulp.task('serve', () => {
   browserSync({
+    open: 'local',
     server: {
       baseDir: config.dest,
       middleware: [
@@ -179,17 +178,6 @@ gulp.task('serve', () => {
   gulp.task('images:watch', ['images'], browserSync.reload);
   gulp.watch(config.images.toolkit.watch, ['images:watch']);
 
-  gulp.task('run:watch', ['run']);
-  gulp.watch(config.mocks, ['run:watch']);
-
-});
-
-gulp.task('run', (cb) => {
-  exec('node mock', (err, stdout, stderr) => {
-    console.log(stdout);
-    console.log(stderr);
-    cb(err);
-  });
 });
 
 
@@ -209,7 +197,6 @@ gulp.task('default', ['clean'], () => {
   // run build
   runSequence(tasks, () => {
     if (config.dev) {
-      gulp.start('run');
       gulp.start('serve');
     }
   });
