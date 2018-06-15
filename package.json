@@ -7,7 +7,7 @@
   "scripts": {
     "prestart": "npm install",
     "build": "npm run prestart && gulp",
-    "start": "npm run prestart && gulp --dev",
+    "start": "concurrently --kill-others \"node mock\" \"npm run prestart && gulp --dev\"",
     "test": "npm run build"
   },
   "keywords": [
@@ -38,6 +38,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "browser-sync": "^2.24.4",
     "compression": "^1.7.2",
+    "concurrently": "^3.5.1",
     "del": "^3.0.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
